@@ -1,0 +1,281 @@
+<div class="wrapper">
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a routerLink="/admin">Home </a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                            title="Collapse">
+                            <i class="fas fa-minus"></i></button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
+                            title="Remove">
+                            <i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Left col -->
+                    <section class="col-lg-5 connectedSortable">
+                        <div class="card-body p-0">
+                            <h2 class="breadcrumb-item active">Countries</h2>
+                            <p class="alert alert-danger" *ngIf="messageErrorCountry">{{messageErrorCountry}}</p>
+                            <table datatable class="table table-striped projects row-border hover">
+                                <thead>
+                                    <tr>
+                                        <th>Id </th>
+                                        <th>Country</th>
+                                        <th> <a class="btn btn-info btn-sm" (click)="add()">
+                                                <i class="fas fa-plus">
+                                                </i> Add country
+                                            </a></th>
+                                    </tr>
+
+                                </thead>
+                                <tbody *ngIf="chackeAddCountry">
+                                    <tr>
+                                        <td>
+                                            <input type="number" class="form-control" [(ngModel)]="Countries.id"
+                                                placeholder="Id">
+                                        </td>
+                                        <td>
+                                            <input type="text" #name class="form-control" [(ngModel)]="Countries.name"
+                                                placeholder="Country">
+                                        </td>
+                                        <td>
+                                            <a (click)="addCountry()" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-folder"></i>
+                                                Save
+                                            </a>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="!chackeAddCountry">
+
+                                    <tr *ngFor="let countr of countries ; index as i">
+
+                                        <td>{{countr.id}}</td>
+                                        <td>{{countr.name}}</td>
+                                        <td>
+                                            <a class="btn btn-danger btn-sm" (click)="deletCountry(i)">
+                                                <i class="fas fa-folder">
+                                                </i> Delete
+                                            </a>
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </section>
+                    <!-- /.Left col -->
+                    <!-- right col (We are only adding the ID to make the widgets sortable)-->
+                    <section class="col-lg-7 connectedSortable">
+                        <div class="card-body p-0">
+                            <h2 class="breadcrumb-item active">Cities</h2>
+                            <p class="alert alert-danger" *ngIf="messageErrorCity">{{messageErrorCity}}</p>
+
+                            <table datatable class="table table-striped projects row-border hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th><i class="mdi mdi-city-variant-outline:"></i> Country</th>
+                                        <th>City</th>
+
+                                        <th> <a class="btn btn-info btn-sm" (click)="addCitChack()">
+                                                <i class="fas fa-plus">
+                                                </i> Add City
+                                            </a></th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="chackeAddCity">
+                                    <tr>
+                                        <td>
+                                            <input type="number" class="form-control" [(ngModel)]="Cities.id"
+                                                placeholder="Id">
+                                        </td>
+                                        <td>
+                                            <select class="form-control" [(ngModel)]="Cities.NameCountry"
+                                                placeholder=".col-3">
+                                                <option value="">Choose Country</option>
+                                                <option *ngFor="let country of countries" value="{{country.name}}">
+                                                    {{country.name}}</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" [(ngModel)]="Cities.name"
+                                                placeholder="City">
+                                        </td>
+                                        <td>
+                                            <a (click)="addCity()" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-folder"></i>
+                                                Save
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody *ngIf="!chackeAddCity">
+
+                                    <tr *ngFor="let city of cities ; index as i">
+                                        <td>{{city.id}}</td>
+                                        <td>{{city.name}}</td>
+                                        <td>{{city.NameCountry}}</td>
+                                        <td>
+                                            <a class="btn btn-danger btn-sm" (click)="deletCity(i)">
+                                                <i class="fas fa-folder">
+                                                </i> Delete
+                                            </a>
+
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+
+                    </section>
+                    <!-- right col -->
+                </div>
+                <div class="card-body p-0">
+                    <h2 class="breadcrumb-item active">Prodacts</h2>
+                    <p class="alert alert-danger" *ngIf="messageErrorProdacts">{{messageErrorProdacts}}</p>
+                    <label>Filter by city</label>
+                    <select class="form-control"  [(ngModel)]="filterCity"(change)="filterProdactsByCity(filterCity)">
+                        <option value="">Choose City</option>
+                        <option *ngFor="let city of cities" value={{city.name}}>
+                            {{city.name}}</option>
+                    </select>
+                    <label>Filter by country</label>
+                    <select class="form-control" [(ngModel)]="filtercountry" (change)="filterProdactsByCountry(filtercountry)">
+                        <option value="">Choose Country</option>
+                        <option *ngFor="let country of countries" value={{country.name}}>
+                            {{country.name}}</option>
+                    </select>
+                    <table datatable class="table table-striped projects row-border hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Country </th>
+                                <th>City</th>
+                                <th>Status </th>
+                                <th>Location </th>
+                                <th>description</th>
+                                <th> <a class="btn btn-info btn-sm" (click)="addProdactChack()">
+                                        <i class="fas fa-plus">
+                                        </i> Add Prodact
+                                    </a></th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="chackeAddProdact">
+                            <tr>
+                                <td> <input type="number" class="form-control" [(ngModel)]="Prodacts.id"
+                                        placeholder="Id"></td>
+                                <td>
+                                    <input type="text" class="form-control" [(ngModel)]="Prodacts.name"
+                                        placeholder="Name">
+                                </td>
+                                <td>
+                                    <select class="form-control" [(ngModel)]="Prodacts.location.country"
+                                        (change)="findCitiesByCountry(Prodacts.location.country)">
+                                        <option value="">Choose Country</option>
+                                        <option *ngFor="let country of countries" value={{country.name}}>
+                                            {{country.name}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control" [(ngModel)]="Prodacts.location.city">
+                                        <option value="">Choose City</option>
+                                        <option *ngFor="let city of citesByCountry" value={{city.name}}>
+                                            {{city.name}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control" [(ngModel)]="Prodacts.status">
+                                        <option value="">Choose Status</option>
+                                        <option value=true>
+                                            Activate</option>
+                                        <option value=false>
+                                            Blocked </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" [(ngModel)]="Prodacts.lat"
+                                    placeholder="Lat">
+                                    <input type="number" class="form-control" [(ngModel)]="Prodacts.lang"
+                                        placeholder="Lang">
+                                </td>
+
+                       
+                                <td>
+                                    <input type="text" class="form-control" [(ngModel)]="Prodacts.description"
+                                    placeholder="Description">
+                                </td>
+                                <td>
+
+                                    <a class="btn btn-info btn-sm" (click)="addProdact()">
+                                        <i class="fas fa-pencil-alt">
+                                        </i> Save
+                                    </a>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                        <tbody *ngIf="!chackeAddProdact">
+                            <tr *ngFor="let prodact of prodactsFilter ; index as i">
+                                <td>{{prodact.id}}</td>
+                                <td>{{prodact.name}}</td>
+                                <td>{{prodact.country}}</td>
+                                <td>{{prodact.city}}</td>
+                                <td>
+                                    <p *ngIf="prodact.status">Activated</p>
+                                    <p *ngIf="!prodact.status">Blocked</p>
+                                </td>
+                                <td>{{prodact.location.formattedAddress}}</td>
+                                <td>{{prodact.description}}</td>
+                                <td>
+
+                                    <a class="btn btn-danger btn-sm" (click)="deletProdact(i)">
+                                        <i class="fas fa-folder">
+                                        </i> Delete
+                                    </a>
+                           
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+</div>
